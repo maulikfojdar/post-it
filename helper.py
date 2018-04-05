@@ -5,7 +5,7 @@ import hashlib
 import hmac
 import random
 from string import letters
-from google.appengine.ext import ndb
+from google.appengine.ext import db
 
 secret = "secret"
 
