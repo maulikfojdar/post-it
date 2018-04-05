@@ -24,7 +24,6 @@ class AddComment(Handler):
         # check if there is anything entered in the comment text area
         if comment_text:
             # add comment to the comments database and refresh page
-            #key = db.Key.from_path('Post', int(post_id), parent=blog_key())
             Comment.create(post_id, comment_text, self.user.name)
             time.sleep(0.1)
             self.redirect('/post/'+post_id)

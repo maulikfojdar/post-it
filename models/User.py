@@ -1,15 +1,16 @@
 from google.appengine.ext import ndb
+from libs.bcrypt import bcrypt
 from helper import *
 
 
 class User(ndb.Model):
     name = ndb.StringProperty(required=True)
-    pw_hash = ndb.StringProperty(required=True)
+    password = ndb.StringProperty(required=True)
     email = ndb.StringProperty(required=True)
 
     @classmethod
     def by_id(cls, uid):
-        return User.get_by_id(uid, parent=users_key())
+        return User.get_by_id(int(uid))
 
     @classmethod
     def by_name(cls, name):
@@ -18,15 +19,14 @@ class User(ndb.Model):
             return u
 
     @classmethod
-    def register(cls, name, pw, email=None):
-        pw_hash = make_pw_hash(name, pw)
-        return User(parent=users_key(),
-                    name=name,
-                    pw_hash=pw_hash,
-                    email=email)
+    def register(cls, name, password, email=None):
+        pw_hash = bcrypt.hashpw(password, bcrypt.gensalt())
+        return User(name = name, password = pw_hash, email = email)
 
     @classmethod
-    def login(cls, name, pw):
+    def login(cls, name, password):
         u = cls.by_name(name)
-        if u and valid_pw(name, pw, u.pw_hash):
+        # if user exists and his unencrypted password
+        # matches one that haspreviously been hashed
+        if u and bcrypt.hashpw(password, u.password) == u.password:
             return u
