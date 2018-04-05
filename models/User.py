@@ -13,8 +13,9 @@ class User(ndb.Model):
 
     @classmethod
     def by_name(cls, name):
-        u = User.all().filter('name =', name).get()
-        return u
+        user = User.query(User.name==name).fetch(1)
+        for u in user:
+            return u
 
     @classmethod
     def register(cls, name, pw, email=None):

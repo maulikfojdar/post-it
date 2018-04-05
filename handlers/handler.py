@@ -2,7 +2,7 @@ import webapp2
 import os
 import jinja2
 from google.appengine.ext import db
-from models.user import User
+from models.User import User
 from helper import *
 
 # Define jinja2 templates directory.
