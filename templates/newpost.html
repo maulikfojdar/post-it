@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<form method="post">
+    <h2> New Post </h2>
+    <br/>
+    <fieldset class="form-group">
+      <input class="form-control form-control-lg"
+        name = "subject"
+        formControlName="title"
+        type="text"
+        placeholder="Post Title" 
+        value="{{subject}}"/>
+    </fieldset>
+
+    <fieldset class="form-group">
+      <textarea class="form-control"
+        name = "content"
+        formControlName="content"
+        rows="8"
+        placeholder="Write your Post here">
+        {{content}}
+      </textarea>
+    </fieldset>
+
+    <!-- <fieldset class="form-group">
+      <input class="form-control"
+        type="text"
+        placeholder="Enter tags"
+        [formControl]="tagField"
+        (keyup.enter)="addTag()" />
+
+      <div class="tag-list">
+        <span *ngFor="let tag of article.tagList"
+          class="tag-default tag-pill">
+          <i class="ion-close-round" (click)="removeTag(tag)"></i>
+          {{ tag }}
+        </span>
+      </div>
+    </fieldset> -->
+
+    <div name="error">{{error}}</div>
+    <input class="btn btn-lg pull-right btn-primary" value="Publish" type="submit">
+</form>
+ {% endblock %}

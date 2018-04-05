@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<form method="post">
+    <h2> Edit Post </h2>
+    <br/>
+    <fieldset class="form-group">
+      <input class="form-control form-control-lg"
+        name = "subject"
+        formControlName="title"
+        type="text"
+        placeholder="Post Title" 
+        value="{{post.subject}}"/>
+    </fieldset>
+
+    <fieldset class="form-group">
+      <textarea class="form-control"
+        name = "content"
+        formControlName="content"
+        rows="8">
+        {{post.content}}
+      </textarea>
+    </fieldset>
+
+    <label class="alert-danger">{{post_error}}</label>
+    <input type="submit" class="btn btn-success" name="update" value="Update"/>
+    <a href="/{{post_id}}">
+        <button class="btn btn-default">Cancel</button>
+    </a>
+</form>
+{% endblock %}

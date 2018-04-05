@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block content %}
+    
+    <div class="post">
+        <div class="post-heading">
+
+            <h1 class="post-title">
+              <a class="post-link" href="/post/{{post.key.id()}}">{{ post.subject }}</a>
+            </h1>
+            {% if post.author == user.name %}
+            <div class="dropdown action-btn">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+              <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+              <li><a href="/post/{{post.key.id()}}/edit">Edit</a></li>
+              <li>
+                <a class="del-post-link" href="/post/{{post.key.id()}}/delete">Delete</a>
+              </li>
+            </ul>
+            </div>
+            {% endif %}
+             <label class="post-date">{{ post.humanDate() }}</label>
+        </div>
+        <p class="lead post-content">{{ post.nl2br() }}</p>
+        <div class="author-container">
+          <span class="label label-warning author-txt">{{post.author}}</span>
+        </div>
+        <form method="post" action="/post/{{post.key.id()}}/like">
+            <button type="submit" class="btn btn-default" {% if post.author == user.name or not user %} disabled {% endif %}>
+              <span class="glyphicon glyphicon-heart{%if like_text == 'Unlike'%}-empty{% endif %} red-heart" aria-hidden="true"></span> {{like_text}}
+            </button>
+            <label class="likes-counter">{{likes_num}} Likes</label>
+        </form>
+    <div>
+
+    </div>
+    {% if user %}
+    <span class="alert-danger">{{error}}</span>
+    {% endif %}
+    <div class="comment-container">
+            <form action="/post/{{post.key.id()}}/comment" method="post">
+              <textarea name="comment_text" class="form-control comment" placeholder="Comment..."></textarea>
+              <button class="btn btn-primary btn-lg comment-btn">Comment</button>
+            </form>
+          </div>
+<hr>
+{% if comments_count == 1 %}
+    <label>{{comments_count}} Comment</label>
+{% else %}
+    <label>{{comments_count}} Comments</label>
+{% endif %}
+
+<!-- Comments area -->
+
+
+{% for comment in comments %}
+    <div class="panel panel-default">
+        <div class="panel-body comment-block">
+            <strong class="text-primary comment-author">{{ comment.author }}</strong>
+            {% if comment.author == user.name %}
+            <div class="dropdown action-btn comment-action-btn">
+              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                <li><a class="edit-comment" href="/post/{{post.key.id()}}/comment/{{comment.key.id()}}/edit">Edit</a></li>
+                <li>
+                  <a class="del-post-link" href="">Delete</a>
+                  <form class="critical-frm" method="post" action="/post/{{post.key.id()}}/comment/{{comment.key.id()}}/delete"></form>
+                </li>
+              </ul>
+            </div>
+            {% endif %}
+            <p class="comment">{{ comment.comment }}</p>
+            <br/>
+            <div>
+                <div class="pull-left">
+                    <small>Posted on {{comment.humanDate()}}</small>
+                </div>
+                <div class="pull-right">
+                    {% if comment.author == user.name %}
+                        <a class="text-primary comment-action" href="/post/{{post.key.id()}}/comment/{{comment.key.id()}}/edit">Edit</a> | 
+                        <a class="text-primary comment-action" href="/post/{{post.key.id()}}/comment/{{comment.key.id()}}/delete">Delete</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+
+{% endblock %}
